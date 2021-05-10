@@ -3,40 +3,21 @@ import SearchBar from './SearchBar';
 import youtube from '../apis/youTube';
 import VideoList from './VideoList';
 import VideoDetail from './VideoDetail';
+import useVideos from '../hooks/useVideos';
 
 const App = () => {
-  const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
-
-  const onTermSubmit = async term => {
-    const response = await youtube.get('/search', {
-      params: {
-        q: term,
-      },
-    });
-
-    setVideos(response.data.items);
-    setSelectedVideo(response.data.items[0]);
-  };
-
-  const onVideoSelect = video => {
-    setSelectedVideo(video);
-  };
-
-  useEffect(() => {
-    onTermSubmit('Programming');
-  }, []);
 
   return (
     <div className="ui container">
-      <SearchBar onFromSubmit={onTermSubmit} />
+      <SearchBar onFormSubmit={onTermSubmit} />
       <div className="ui grid">
         <div className="ui row">
           <div className="eleven wide column">
             <VideoDetail video={selectedVideo} />
           </div>
           <div className="five wide column">
-            <VideoList onVideoSelect={onVideoSelect} videos={videos} />
+            <VideoList onVideoSelect={setSelectedVideo} videos={videos} />
           </div>
         </div>
       </div>
